@@ -19,8 +19,7 @@ jobs:
         id: tagging
         run: |
           docker build -t ${{ secrets.DOCKER_UNAME }}/app-client-2:${GITHUB_SHA::7} .
-          echo "IMAGE_TAG=${{ GITHUB_SHA::7 }}" >> $GITHUB_OUTPUT
-
+          echo "IMAGE_TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
       - name: Test newly created build image
         run: docker run --rm -d --name back-cnt -p 3000:3000 ${{ secrets.DOCKER_UNAME }}/app-client-2:${GITHUB_SHA::7}
 
@@ -29,7 +28,6 @@ jobs:
         run : |
           docker login -u ${{ secrets.DOCKER_UNAME }} -p ${{ secrets.DOCKER_TOKEN }}
           docker push ${{ secrets.DOCKER_UNAME }}/app-client-2:${GITHUB_SHA::7}
-
   Change-image-tag-and-deploy:
     needs: [Image-build-push]
     runs-on: self-hosted
@@ -39,14 +37,19 @@ jobs:
 
     steps:
       - name: Check out other repo from same organization
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
         with:
-          repository: first-org/for-compose
-          token: ${{ secrets.GIT_TOKEN }}
+          repository: org-547/for-compose
+          #token: ${{ secrets.GIT_TOKEN }}
+          ref: main
 
+      - name: Install docker compose
+        run: |
+          echo "artbi ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/artbi
+          sudo apt install docker-compose -y
       - name: Docker-compose down and up
         run: |
           export FRONT_TAG=${{ env.IMAGE_TAG }}
-          docker-compose down
-          docker-compose up
+          docker compose down 
+          docker compose up -d
     
