@@ -1,0 +1,15 @@
+name: Initial build of docker image
+
+on: workflow_dispatch
+
+jobs:
+  Image-build-push:
+    uses: org-547/reusable/.github/workflows/img-build-push.yml@main
+    with:
+      initial: yes
+      app-component: app-client-2
+      container: front-cnt
+      port: 3000
+    secrets:  
+      docker-uname: ${{ secrets.DOCKER_UNAME }}
+      docker-token: ${{ secrets.DOCKER_TOKEN}}
