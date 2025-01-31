@@ -58,7 +58,7 @@ jobs:
           if [ ${{ steps.get-tag.outputs.tag }}  == ${BACK_TAG} ]; then
             export BACK_TAG=first
           fi  
-          export BACK_TAG=${GITHUB_SHA::7}
+          export FRONT_TAG=${GITHUB_SHA::7}
           echo "Backend tag is: $BACK_TAG"
           docker-compose down 
           docker-compose up -d
