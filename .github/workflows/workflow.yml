@@ -22,10 +22,6 @@ jobs:
     outputs:
       tag: ${{ steps.get-tag.outputs.tag }}
 
-    strategy:
-      matrix:
-        cnt: [back-cnt, front-cnt, pg-cnt]
-
     steps:
       - name: Check out other repo from same organization
         uses: actions/checkout@v3
@@ -51,11 +47,27 @@ jobs:
 
       - name: Check frontend container existence
         run: |
-          if docker ps -a --format '{{.Names}}' | grep -q '${{ matrix.cnt }}'; then
-            echo "Container with name '${{ matrix.cnt }}' already exists!"
-            docker stop ${{ matrix.cnt }} || true
-            docker rm ${{ matrix.cnt }} || true
+          if docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
+            echo "Container with name 'front-cnt' already exists!"
+            docker stop front-cnt || true
+            docker rm front-cnt || true
           fi 
+
+      - name: Check backend container existence
+        run: |
+          if docker ps -a --format '{{.Names}}' | grep -q 'back-cnt'; then
+            echo "Container with name 'back-cnt' already exists!"
+            docker stop back-cnt || true
+            docker rm back-cnt || true
+          fi 
+
+      - name: Check postgres container existence
+        run: |
+          if docker ps -a --format '{{.Names}}' | grep -q 'pg-cnt'; then
+            echo "Container with name 'pg-cnt' already exists!"
+            docker stop pg-cnt || true
+            docker rm pg-cnt || true
+          fi    
 
       - name: Docker-compose down and up
         run: |
