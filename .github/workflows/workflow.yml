@@ -57,6 +57,8 @@ jobs:
         run: |
           #line=${{ steps.get-line.outputs.awk-out }}
           if grep -q "undefined" <<< $(awk '/undefined-back-tag$/' docker-compose.yml); then
+            echo "Backend image-tag is not been determined yet!"
+          else  
             docker-compose down
             docker-compose up -d
           fi  
