@@ -21,7 +21,7 @@ jobs:
 
     outputs:
       ls-out: ${{ steps.ls.outputs.ls-out }}
-      awk-out: ${{ steps.get-line.outputs.awk-out }}
+      #awk-out: ${{ steps.get-line.outputs.awk-out }}
 
     steps:  
       - name: Set up Git
@@ -36,9 +36,9 @@ jobs:
           private-key: ${{ secrets.SSH_PRIV_KEY }}
           private-key-name: github
 
-      - name: Get ls output
-        id: ls
-        run: echo "ls-out=$(ls -lt)" >> $GITHUB_OUTPUT
+      #- name: Get ls output
+        #id: ls
+        #run: echo "ls-out=$(ls -lt)" >> $GITHUB_OUTPUT
 
       - name: Check and clone 
         run: |
