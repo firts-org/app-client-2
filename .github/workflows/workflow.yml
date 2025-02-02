@@ -59,7 +59,7 @@ jobs:
               docker stop "$cnt" || true
               docker rm "$cnt" || true
             fi
-          don
+          done
 
       - name: Execute awk command for extract necessary line
         id: get-line
