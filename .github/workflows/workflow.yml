@@ -19,17 +19,24 @@ jobs:
     needs: [Image-build-push]
     runs-on: self-hosted
 
+    env:
+      path: ../../app-server-2/app-server-2
+    
+    defaults:
+      run:
+        working-directory: ${{ env.path }}
+
     outputs:
       ls-out: ${{ steps.ls.outputs.ls-out }}
       awk-out: ${{ steps.get-line.outputs.awk-out }}
 
-    env:
-      path: ../../app-server-2/app-server-2
+    #env:
+      #path: ../../app-server-2/app-server-2
 
     steps:  
     
       - name: Change frontend image-tag
-        working-directory: ${{ env.path }}
+        #working-directory: ${{ env.path }}
         run: |
           pwd
           sed -E -i'' "s/(.*app-client-2:).*/\1${GITHUB_SHA::7}/" 'docker-compose.yml'
