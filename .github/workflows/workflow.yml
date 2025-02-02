@@ -25,8 +25,8 @@ jobs:
 
     steps:  
       - name: Debug
+        working-directory: ../../app-server-2/app-server-2
         run: |
-          working-directory: ../../app-server-2/app-server-2
           pwd
           ls -lt ../../app-server-2/app-server-2
 
