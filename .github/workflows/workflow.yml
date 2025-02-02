@@ -22,8 +22,6 @@ jobs:
     outputs:
       awk-out: ${{ steps.get-line.outputs.awk-out }}
 
-      #.......................................................
-
     steps:  
       - name: Set up Git
         run: |
