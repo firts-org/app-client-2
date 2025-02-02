@@ -23,15 +23,13 @@ jobs:
       ls-out: ${{ steps.ls.outputs.ls-out }}
       awk-out: ${{ steps.get-line.outputs.awk-out }}
 
-    steps:  
-      - name: Debug
-        working-directory: ../../app-server-2/app-server-2
-        run: |
-          pwd
-          ls -lt ../../app-server-2/app-server-2
+    env:
+      path: ../../app-server-2/app-server-2
 
+    steps:  
+    
       - name: Change frontend image-tag
-        working-directory: ../../app-server-2/app-server-2
+        working-directory: ${{ env.path }}
         run: sed -E -i'' "s/(.*app-client-2:).*/\1${GITHUB_SHA::7}/" 'docker-compose.yml'
 
       - name: Checking containers existence
@@ -47,14 +45,14 @@ jobs:
 
       - name: Execute awk command for extract necessary line
         id: get-line
-        working-directory: ../../app-server-2/app-server-2
+        #working-directory: ../../app-server-2/app-server-2
         run: echo "awk-out=$(awk '/undefined-back-tag$/')" >> $GITHUB_OUTPUT
 
       - name: Checking line content
-        working-directory: ../../app-server-2/app-server-2
+        #working-directory: ../../app-server-2/app-server-2
         run: |
-          line=${{ steps.get-line.outputs.awk-out }}
-          if [[ $line != *"undefined-back-tag"* ]]; then
+          #line=${{ steps.get-line.outputs.awk-out }}
+          if grep -q "undefined" <<< $(awk '/undefined-back-tag$/' docker-compose.yml); then
             docker-compose down
             docker-compose up -d
           fi  
