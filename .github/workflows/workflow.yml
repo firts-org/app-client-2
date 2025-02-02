@@ -78,6 +78,7 @@ jobs:
         run: echo "awk-out=$(awk '/undefined-back-tag$/')" >> $GITHUB_OUTPUT
 
       - name: Checking line content
+        working-directory: app-server-2
         run: |
           line=${{ steps.get-line.outputs.awk-out }}
           if [[ $line != *"undefined-back-tag"* ]]; then
