@@ -21,7 +21,7 @@ jobs:
 
     outputs:
       ls-out: ${{ steps.ls.outputs.ls-out }}
-      #awk-out: ${{ steps.get-line.outputs.awk-out }}
+      awk-out: ${{ steps.get-line.outputs.awk-out }}
 
     steps:  
       - name: Set up Git
