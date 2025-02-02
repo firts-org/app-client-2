@@ -24,51 +24,12 @@ jobs:
       awk-out: ${{ steps.get-line.outputs.awk-out }}
 
     steps:  
-      - name: Set up Git
-        run: |
-          git config --global user.name 'Tereza'
-          git config --global user.email 'an3146073@gmail.com'
-
-      - name: Setup SSH
-        uses: MrSquaare/ssh-setup-action@v1
-        with:
-          host: github.com
-          private-key: ${{ secrets.SSH_PRIV_KEY }}
-          private-key-name: github
-
-      #- name: Get ls output
-        #id: ls
-        #run: echo "ls-out=$(ls -lt)" >> $GITHUB_OUTPUT
-
-      - name: Check and clone 
-        run: |
-          
-          if grep -q "app-server-2" <<< $(ls -lt); then
-            echo "Repository with name app-server-2 already exists!"
-          else
-            git clone git@github.com:org-547/app-server-2.git
-          fi
-
-      - name: debug
-        run: pwd
-
-      - name: debug again
-        run: |
-          cd ../..
-          pwd
+      - name: Debug
+        run: ls -lt ../../app-server-2
 
       - name: Change frontend image-tag
-        working-directory: app-server-2
+        working-directory: ../../app-server-2
         run: sed -E -i'' "s/(.*app-client-2:).*/\1${GITHUB_SHA::7}/" 'docker-compose.yml'
-
-      - name: Commit and Push Changes
-        working-directory: app-server-2
-        env:
-          GITHUB_TOKEN: ${{ secrets.dockerhub_token }}
-        run: |
-          git add docker-compose.yml
-          git commit -m "Update compose file"
-          git push origin main   
 
       - name: Checking containers existence
         run: |
@@ -83,11 +44,11 @@ jobs:
 
       - name: Execute awk command for extract necessary line
         id: get-line
-        working-directory: app-server-2
+        working-directory: ../../app-server-2
         run: echo "awk-out=$(awk '/undefined-back-tag$/')" >> $GITHUB_OUTPUT
 
       - name: Checking line content
-        working-directory: app-server-2
+        working-directory: ../../app-server-2
         run: |
           line=${{ steps.get-line.outputs.awk-out }}
           if [[ $line != *"undefined-back-tag"* ]]; then
