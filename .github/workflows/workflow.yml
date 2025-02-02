@@ -35,6 +35,11 @@ jobs:
           private-key: ${{ secrets.SSH_PRIV_KEY }}
           private-key-name: github
 
+      - name: Check 'app-server-2' repo existence
+        run: |
+          pwd
+          ls -lt
+
       - name: Clone target repository
         run: git clone git@github.com:org-547/app-server-2.git
 
