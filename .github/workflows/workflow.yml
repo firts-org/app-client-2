@@ -20,7 +20,7 @@ jobs:
     runs-on: self-hosted
 
     env:
-      path: ../../app-server-2/app-server-2
+      path: ../../app-server-2/app-server-2/app-server-2
     
     defaults:
       run:
